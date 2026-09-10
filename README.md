@@ -17,22 +17,22 @@ block means adding it there once.
 
 ## Getting started
 
+Requires Node 20+ and pnpm 10 (`npm install -g pnpm`).
+
 ```bash
-pnpm install
+pnpm install       # also generates the Prisma client
+pnpm bootstrap     # creates the three .env files from .env.example
+```
+
+Then start Postgres. With Docker Desktop:
+
+```bash
 docker compose up -d          # Postgres 16 on :5432
 ```
 
-If you already run Postgres locally, skip the compose file and create a
-`church_platform` database yourself.
-
-Point both apps at it by copying `.env.example` to `.env` in `packages/db`,
-`apps/admin` and `apps/client`:
-
-```bash
-for d in packages/db apps/admin apps/client; do cp "$d/.env.example" "$d/.env"; done
-```
-
-The default URL matches the compose file:
+If you already run Postgres locally, skip the compose file, create a
+`church_platform` database, and edit `DATABASE_URL` in the three `.env`
+files to match your credentials. The default expects:
 
 ```
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/church_platform?schema=public"
@@ -44,6 +44,8 @@ Then create the schema and seed a church:
 pnpm db:migrate  # apply prisma/migrations (use db:push for throwaway changes)
 pnpm db:seed     # creates "Grace Chapel" with a "/" page
 ```
+
+All of the above is the same on Windows PowerShell, macOS and Linux.
 
 ## Running
 

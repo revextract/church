@@ -7,6 +7,8 @@
     "node": ">=20"
   },
   "scripts": {
+    "bootstrap": "node scripts/bootstrap-env.mjs",
+    "postinstall": "pnpm --filter @church/db generate",
     "dev": "pnpm --parallel --filter \"./apps/*\" dev",
     "build": "pnpm --filter \"./packages/*\" build && pnpm --filter \"./apps/*\" build",
     "db:generate": "pnpm --filter @church/db generate",

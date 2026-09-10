@@ -22,3 +22,4 @@ coverage/
 apps/admin/next-env.d.ts
 apps/admin/AGENTS.md
 apps/admin/CLAUDE.md
+*.tsbuildinfo
