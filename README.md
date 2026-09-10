@@ -19,10 +19,20 @@ block means adding it there once.
 
 ```bash
 pnpm install
+docker compose up -d          # Postgres 16 on :5432
 ```
 
-Point both apps at Postgres: copy `.env.example` to `.env` in
-`packages/db`, `apps/admin` and `apps/client`:
+If you already run Postgres locally, skip the compose file and create a
+`church_platform` database yourself.
+
+Point both apps at it by copying `.env.example` to `.env` in `packages/db`,
+`apps/admin` and `apps/client`:
+
+```bash
+for d in packages/db apps/admin apps/client; do cp "$d/.env.example" "$d/.env"; done
+```
+
+The default URL matches the compose file:
 
 ```
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/church_platform?schema=public"

@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: church-platform-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: church_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - church-platform-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d church_platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  church-platform-db:
