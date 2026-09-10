@@ -31,8 +31,7 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/church_platform?sche
 Then create the schema and seed a church:
 
 ```bash
-pnpm db:push     # push schema.prisma to Postgres
-pnpm db:generate # regenerate the Prisma client
+pnpm db:migrate  # apply prisma/migrations (use db:push for throwaway changes)
 pnpm db:seed     # creates "Grace Chapel" with a "/" page
 ```
 
@@ -50,8 +49,12 @@ pnpm dev         # both apps
   `@puckeditor/core/rsc`. No `client:*` directive, so the browser gets HTML
   and no JavaScript.
 
-In dev the client resolves the church from `DEFAULT_CHURCH_SLUG`; in
-production it uses the request hostname's first label (`grace-chapel.example.com`).
+The client picks the church from the request host: the first label of
+`grace-chapel.example.com` is the slug. A bare host (`localhost`, an IP)
+carries no tenant, so it falls back to `DEFAULT_CHURCH_SLUG` from
+`apps/client/.env`. To exercise real multi-tenant routing locally, use
+`http://grace-chapel.localhost:4321`, which resolves without any hosts-file
+entry.
 
 ## Data model
 

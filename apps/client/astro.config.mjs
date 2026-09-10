@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import react from "@astrojs/react";
 import node from "@astrojs/node";
 import tailwindcss from "@tailwindcss/vite";
@@ -10,6 +10,17 @@ export default defineConfig({
   output: "server",
   adapter: node({ mode: "standalone" }),
   integrations: [react()],
+  env: {
+    schema: {
+      // Which church to serve when the host carries no tenant subdomain
+      // (localhost, an IP). Unset in production.
+      DEFAULT_CHURCH_SLUG: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
     ssr: {

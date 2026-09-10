@@ -1,16 +1,21 @@
 ---
 import { prisma } from "@church/db";
 import { toPuckData } from "@church/puck-config";
+import { DEFAULT_CHURCH_SLUG } from "astro:env/server";
 import Base from "../layouts/Base.astro";
 import PuckPage from "../components/PuckPage";
 
-// One Astro app serves every tenant. In production the church comes from the
-// request hostname; locally we fall back to DEFAULT_CHURCH_SLUG.
+// One Astro app serves every tenant, keyed off the request host:
+// grace-chapel.example.com -> the "grace-chapel" church. A bare host
+// (localhost, an IP) carries no tenant, so fall back to the dev default.
 const hostname = Astro.url.hostname;
-const slug =
-  hostname.split(".")[0] ||
-  import.meta.env.DEFAULT_CHURCH_SLUG ||
-  "";
+const isIpAddress = /^\d{1,3}(\.\d{1,3}){3}$/.test(hostname);
+const isBareHost = isIpAddress || !hostname.includes(".");
+const slug = isBareHost ? DEFAULT_CHURCH_SLUG : hostname.split(".")[0];
+
+if (!slug) {
+  return new Response("No church configured for this host", { status: 404 });
+}
 
 const path = "/" + (Astro.params.slug ?? "");
 const normalizedPath = path === "/" ? "/" : path.replace(/\/+$/, "");
