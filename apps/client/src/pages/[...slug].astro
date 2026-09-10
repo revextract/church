@@ -1,0 +1,33 @@
+---
+import { prisma } from "@church/db";
+import { toPuckData } from "@church/puck-config";
+import Base from "../layouts/Base.astro";
+import PuckPage from "../components/PuckPage";
+
+// One Astro app serves every tenant. In production the church comes from the
+// request hostname; locally we fall back to DEFAULT_CHURCH_SLUG.
+const hostname = Astro.url.hostname;
+const slug =
+  hostname.split(".")[0] ||
+  import.meta.env.DEFAULT_CHURCH_SLUG ||
+  "";
+
+const path = "/" + (Astro.params.slug ?? "");
+const normalizedPath = path === "/" ? "/" : path.replace(/\/+$/, "");
+
+const page = await prisma.page.findFirst({
+  where: { path: normalizedPath, church: { slug } },
+  include: { church: true },
+});
+
+if (!page) {
+  return new Response("Not found", { status: 404 });
+}
+
+const data = toPuckData(page.puckJson);
+---
+
+<Base title={page.church.name}>
+  <!-- No client: directive => server-rendered HTML, zero JS shipped. -->
+  <PuckPage data={data} />
+</Base>

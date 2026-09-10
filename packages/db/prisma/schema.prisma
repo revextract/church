@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// A tenant. Each church gets its own white-labeled site.
+model Church {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  pages     Page[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// A single page of a church's site. `puckJson` holds the layout
+/// produced by the visual editor and consumed by Puck's <Render>.
+model Page {
+  id        String   @id @default(cuid())
+  churchId  String
+  church    Church   @relation(fields: [churchId], references: [id], onDelete: Cascade)
+  path      String
+  puckJson  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([churchId, path])
+  @@index([churchId])
+}

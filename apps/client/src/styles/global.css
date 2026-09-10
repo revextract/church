@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* Components live outside this app, so point Tailwind at them explicitly. */
+@source "../../../../packages/puck-config/src";

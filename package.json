@@ -1,0 +1,18 @@
+{
+  "name": "church-platform",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "build": "pnpm --filter \"./packages/*\" build && pnpm --filter \"./apps/*\" build",
+    "db:generate": "pnpm --filter @church/db generate",
+    "db:push": "pnpm --filter @church/db push",
+    "db:migrate": "pnpm --filter @church/db migrate",
+    "db:studio": "pnpm --filter @church/db studio",
+    "db:seed": "pnpm --filter @church/db seed"
+  }
+}
