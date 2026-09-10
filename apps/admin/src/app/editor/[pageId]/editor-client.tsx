@@ -44,7 +44,7 @@ export function EditorClient({
       config={config}
       data={initialData}
       onPublish={publish}
-      headerTitle={`${churchName} — ${path}`}
+      headerTitle={`${churchName}: ${path}`}
       headerPath={
         status === "saving"
           ? "Saving…"
